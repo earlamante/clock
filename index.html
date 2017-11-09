@@ -1,0 +1,101 @@
+<html>
+<head>
+    <title>TEST
+        <CLOCK></CLOCK>
+    </title>
+    <style>
+        body {
+            font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;;
+        }
+
+        h2 {
+            display: inline-block;
+            margin: 10px;
+            font-size: 32px;
+            overflow: hidden;
+            width: 39px;
+            height: 37px;
+            text-align: center;
+        }
+
+        h2.separator {
+            width: 15px;
+        }
+
+        h2 > div {
+            height: 37px;
+            width: 78px;
+        }
+
+        span {
+            display: block;
+            float: left;
+            width: 39px;
+            height: 37px;
+        }
+
+        .clock {
+            position: absolute;
+            text-align: center;
+            top: 50%;
+            width: 100%;
+            -webkit-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+<div class="clock">
+    <h2 class="wrapper hour">
+        <div><span></span></div>
+    </h2>
+    <h2 class="separator">:</h2>
+    <h2 class="wrapper minute">
+        <div><span></span></div>
+    </h2>
+    <h2 class="separator">:</h2>
+    <h2 class="wrapper second">
+        <div><span></span></div>
+    </h2>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script>
+    var date = new Date;
+    var h = date.getHours();
+    var m = date.getMinutes();
+    var s = date.getSeconds();
+
+    (function ($) {
+        $('.hour span').text(("0" + h).slice(-2));
+        $('.minute span').text(("0" + m).slice(-2));
+        $('.second span').text(("0" + s).slice(-2));
+
+        setInterval(function () {
+            if (++s == 60) {
+                if (++m == 60) {
+                    if (++h == 24) {
+                        h = 0;
+                    }
+                    goUp(h, 'hour');
+                    m = 0;
+                }
+                goUp(m, 'minute');
+                s = 0;
+            }
+            goUp(s);
+        }, 1000);
+
+        function goUp(n, e = 'second') {
+            var e = $('.' + e);
+            e.find('div').append('<span>' + ("0" + n).slice(-2) + '</span>');
+            e.find('div>span').eq(0).animate({'margin-left': '-39px'}, 500, 'swing', function () {
+                $(this).remove();
+            });
+        }
+    })(jQuery);
+</script>
+</body>
+</html>
